@@ -5,6 +5,10 @@ export class Game extends Scene {
     player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     stars: Phaser.Physics.Arcade.Group;
+    score: number = 0;
+    scoreText: any;
+    bombs: Phaser.Physics.Arcade.Group;
+    gameOver: boolean = false
 
     constructor() {
         super('Game');
@@ -34,7 +38,21 @@ export class Game extends Scene {
         this.platforms.create(600, 400, 'ground');
         this.platforms.create(50, 250, 'ground');
         this.platforms.create(750, 220, 'ground');
+        this.bombs = this.physics.add.group();
 
+        this.physics.add.collider(this.bombs, this.platforms);
+        
+        this.physics.add.collider(this.player, this.bombs, ()=>{} );
+        function hitBomb (this.player, this.bomb)=> {}
+    {
+        this.physics.pause();
+
+        this.player.setTint(0xff0000);
+
+        this.player.anims.play('turn');
+
+        this.gameOver = true;
+}
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 11,
@@ -45,12 +63,16 @@ export class Game extends Scene {
             }
         });
 
-        this.stars.children.iterate( (star: any) => {
+        this.scoreText = this.add.text(16, 16, 'score 0', { fontSize: '48px', fill: '#000' })
+
+        this.stars.children.iterate((star: any) => {
             star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
             return null;
-            })
+        })
 
-            this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.collider(this.stars, this.platforms);
+
+
         this.player = this.physics.add.sprite(100, 450, 'dude');
 
         this.player.setBounce(0.2);
@@ -58,6 +80,17 @@ export class Game extends Scene {
 
         this.physics.add.collider(this.player, this.platforms);
 
+        this.physics.add.overlap(
+            this.player,
+            this.stars,
+            (player, star: any) => {
+                star.disableBody(true, true);
+                this.score += 1;
+                this.scoreText.setText('Score: ' + this.score);
+            },
+            undefined,
+            this
+        );
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
