@@ -30,6 +30,8 @@ export class Game extends Scene {
         this.cursors = this.input.keyboard!.createCursorKeys();
 
         this.add.image(400, 300, 'sky');
+        this.player = this.physics.add.sprite(100, 450, 'dude');
+
 
         this.platforms = this.physics.add.staticGroup();
 
@@ -41,18 +43,17 @@ export class Game extends Scene {
         this.bombs = this.physics.add.group();
 
         this.physics.add.collider(this.bombs, this.platforms);
-        
-        this.physics.add.collider(this.player, this.bombs, ()=>{} );
-        function hitBomb (this.player, this.bomb)=> {}
-    {
-        this.physics.pause();
 
-        this.player.setTint(0xff0000);
+        this.physics.add.collider(
+            this.player,
+            this.bombs,
+            (player, bomb) => {
+                this.physics.pause();
+                this.player.setTint(0xff0000);
+                this.player.anims.play('turn');
+                this.gameOver = true;
+            }, undefined, this);
 
-        this.player.anims.play('turn');
-
-        this.gameOver = true;
-}
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 11,
@@ -73,8 +74,6 @@ export class Game extends Scene {
         this.physics.add.collider(this.stars, this.platforms);
 
 
-        this.player = this.physics.add.sprite(100, 450, 'dude');
-
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
 
@@ -85,6 +84,17 @@ export class Game extends Scene {
             this.stars,
             (player, star: any) => {
                 star.disableBody(true, true);
+
+                if (this.stars.countActive(true) == 0) {
+                    this.stars.children.iterate((star: any) => star.enableBody(true, star.x, 0, true, true));
+                    
+                    let x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+                    let bomb = this.bombs.create(x, 16, 'bomb');
+                    bomb.setBounce(1);
+                    bomb.setCollideWorldBounds(true);
+                    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                }
                 this.score += 1;
                 this.scoreText.setText('Score: ' + this.score);
             },
