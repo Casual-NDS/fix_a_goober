@@ -5,9 +5,13 @@ body {
     background-color: #000000;
 }
 
-#app {
-    width: 100%;
+#center {
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;}
+#app {
+    /* height: 100%; */
     overflow: hidden;
     display: flex;
     justify-content: center;

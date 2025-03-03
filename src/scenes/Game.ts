@@ -1,15 +1,16 @@
 import { Scene } from 'phaser';
 
-export class Game extends Scene {
-    platforms: Phaser.Physics.Arcade.StaticGroup;
-    player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
-    cursors: Phaser.Types.Input.Keyboard.CursorKeys;
-    stars: Phaser.Physics.Arcade.Group;
-    score: number = 0;
-    scoreText: any;
-    bombs: Phaser.Physics.Arcade.Group;
-    gameOver: boolean = false
 
+export class Game extends Scene {
+    currentItem: string;
+    itemA: any;
+    itemB: any;
+    itemC: any;
+    itemD: any;
+    bingus: any;
+    speechText: any;
+    timedEvent: any;
+    onEvent: any;
     constructor() {
         super('Game');
     }
@@ -18,127 +19,60 @@ export class Game extends Scene {
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
-        this.load.image('bomb', 'assets/bomb.png');
-        this.load.spritesheet('dude',
-            'assets/dude.png',
-            { frameWidth: 32, frameHeight: 48 }
-        );
+        this.load.image('bingus','assets/bingus_temp.png');
+        this.load.image('itemA', 'assets/itemA.svg.png');
+        this.load.image('itemB', 'assets/itemB.svg');
+        this.load.image('itemC', 'assets/itemC.svg');
+        this.load.image('itemD', 'assets/itemD.svg');
+        
+        
+    }
 
+    checkItem(item: any){
+        if (this.currentItem == item.value){
+            console.log(this.currentItem + " right item!")
+            this.speechText.setText("says: You got it!");
+            this.randomizeItem()
+            this.speechText.setText(this.currentItem);
+            // change item ,add score, etc.
+        } else {
+            console.log(this.currentItem + " no bad");
+            this.speechText.setText("says: No bad!");
+        }
+    }
+
+    randomizeItem(){
+        this.currentItem = Phaser.Math.RND.pick(['A','B','C','D'])
     }
 
     create() {
-        this.cursors = this.input.keyboard!.createCursorKeys();
-
-        this.add.image(400, 300, 'sky');
-        this.player = this.physics.add.sprite(100, 450, 'dude');
-
-
-        this.platforms = this.physics.add.staticGroup();
-
-        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-
-        this.platforms.create(600, 400, 'ground');
-        this.platforms.create(50, 250, 'ground');
-        this.platforms.create(750, 220, 'ground');
-        this.bombs = this.physics.add.group();
-
-        this.physics.add.collider(this.bombs, this.platforms);
-
-        this.physics.add.collider(
-            this.player,
-            this.bombs,
-            (player, bomb) => {
-                this.physics.pause();
-                this.player.setTint(0xff0000);
-                this.player.anims.play('turn');
-                this.gameOver = true;
-            }, undefined, this);
-
-        this.stars = this.physics.add.group({
-            key: 'star',
-            repeat: 11,
-            setXY: {
-                x: 12,
-                y: 0,
-                stepX: 70,
-            }
-        });
-
-        this.scoreText = this.add.text(16, 16, 'score 0', { fontSize: '48px', fill: '#000' })
-
-        this.stars.children.iterate((star: any) => {
-            star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-            return null;
+        // randomize chosen item
+        this.randomizeItem();
+        this.timedEvent = this.time.addEvent({ delay: 10000, callback: this.onEvent, callbackScope: this, repeat: 1, startAt: 5000 });
+        this.bingus = this.add.image(400,100,'bingus').setScale(2);
+        this.itemA = this.add.image(350,350,'itemA').setScale(0.5);
+        this.itemA.value = "A";
+        this.itemB = this.add.image(450,350,'itemB').setScale(0.5);
+        this.itemB.value = "B";
+        this.itemC = this.add.image(350,450,'itemC').setScale(0.5);
+        this.itemC.value = "C";
+        this.itemD = this.add.image(450,450,'itemD').setScale(0.5);
+        this.itemD.value = "D";
+        for (const item of [this.itemA, this.itemB, this.itemC, this.itemD]){
+            item.setInteractive();
+            item.on('clicked', ()=> {
+                this.checkItem(item);
+            })
+        }
+        this.input.on('gameobjectup', (pointer, gameObject) => {
+            gameObject.emit('clicked');
         })
-
-        this.physics.add.collider(this.stars, this.platforms);
-
-
-        this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
-
-        this.physics.add.collider(this.player, this.platforms);
-
-        this.physics.add.overlap(
-            this.player,
-            this.stars,
-            (player, star: any) => {
-                star.disableBody(true, true);
-
-                if (this.stars.countActive(true) == 0) {
-                    this.stars.children.iterate((star: any) => star.enableBody(true, star.x, 0, true, true));
-                    
-                    let x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-                    let bomb = this.bombs.create(x, 16, 'bomb');
-                    bomb.setBounce(1);
-                    bomb.setCollideWorldBounds(true);
-                    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                }
-                this.score += 1;
-                this.scoreText.setText('Score: ' + this.score);
-            },
-            undefined,
-            this
-        );
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'turn',
-            frames: [{ key: 'dude', frame: 4 }],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
+        this.speechText = this.add.text(16, 16, 'says: ', { fontSize: '32px', fill: '#000' });
     }
 
     update() {
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
-            this.player.anims.play('left', true);
-        }
-        else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-            this.player.anims.play('right', true);
-        }
-        else {
-            this.player.setVelocityX(0);
-            this.player.anims.play('turn');
-        }
-
-        if (this.cursors.up.isDown && this.player.body.touching.down) {
-            this.player.setVelocityY(-330);
-        }
+        
     }
 }
+
+//add onevent and talka abt text changing for delay
