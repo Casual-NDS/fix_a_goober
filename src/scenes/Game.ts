@@ -8,6 +8,7 @@ export class Game extends Scene {
     itemC: any;
     itemD: any;
     bingus: any;
+    bg: any;
     speechText: any;
     timedEvent: any;
     onEvent: any;
@@ -16,14 +17,14 @@ export class Game extends Scene {
     }
 
     preload() {
-        this.load.image('sky', 'assets/sky.png');
+        this.load.image('bg', 'assets/bg.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
         this.load.image('bingus','assets/bingus_temp.png');
         this.load.image('itemA', 'assets/itemA.svg.png');
-        this.load.image('itemB', 'assets/itemB.svg');
-        this.load.image('itemC', 'assets/itemC.svg');
-        this.load.image('itemD', 'assets/itemD.svg');
+        this.load.image('itemB', 'assets/itemB.png');
+        this.load.image('itemC', 'assets/itemC.png');
+        this.load.image('itemD', 'assets/itemD.png');
         
         
     }
@@ -33,7 +34,7 @@ export class Game extends Scene {
             console.log(this.currentItem + " right item!")
             this.speechText.setText("says: You got it!");
             this.randomizeItem()
-            this.speechText.setText(this.currentItem);
+            this.speechText.setText( 'says: '+ this.currentItem);
             // change item ,add score, etc.
         } else {
             console.log(this.currentItem + " no bad");
@@ -49,14 +50,15 @@ export class Game extends Scene {
         // randomize chosen item
         this.randomizeItem();
         this.timedEvent = this.time.addEvent({ delay: 10000, callback: this.onEvent, callbackScope: this, repeat: 1, startAt: 5000 });
+        this.bg = this.add.image(400,300, 'bg').setScale(1);
         this.bingus = this.add.image(400,100,'bingus').setScale(2);
-        this.itemA = this.add.image(350,350,'itemA').setScale(0.5);
+        this.itemA = this.add.image(350,450,'itemA').setScale(0.5);
         this.itemA.value = "A";
-        this.itemB = this.add.image(450,350,'itemB').setScale(0.5);
+        this.itemB = this.add.image(450,450,'itemB').setScale(0.5);
         this.itemB.value = "B";
-        this.itemC = this.add.image(350,450,'itemC').setScale(0.5);
+        this.itemC = this.add.image(350,550,'itemC').setScale(0.5);
         this.itemC.value = "C";
-        this.itemD = this.add.image(450,450,'itemD').setScale(0.5);
+        this.itemD = this.add.image(450,550,'itemD').setScale(0.5);
         this.itemD.value = "D";
         for (const item of [this.itemA, this.itemB, this.itemC, this.itemD]){
             item.setInteractive();
@@ -67,7 +69,7 @@ export class Game extends Scene {
         this.input.on('gameobjectup', (pointer, gameObject) => {
             gameObject.emit('clicked');
         })
-        this.speechText = this.add.text(16, 16, 'says: ', { fontSize: '32px', fill: '#000' });
+        this.speechText = this.add.text(16, 16, 'says: ' + this.currentItem, { fontSize: '32px', fill: '#000' });
     }
 
     update() {
