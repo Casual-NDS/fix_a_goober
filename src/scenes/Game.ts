@@ -45,7 +45,7 @@ export class Game extends Scene {
         } else {
             console.log(this.currentItem + " no bad");
             this.speechText.setText("says: No bad!");
-            this.timeLeft-=100;
+            this.timeLeft -= 100;
         }
     }
 
@@ -55,6 +55,7 @@ export class Game extends Scene {
 
     create() {
         // randomize chosen item
+        this.timeLeft = 1000;
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
         this.bingus = this.add.image(400, 100, 'bingus').setScale(2);
@@ -76,15 +77,14 @@ export class Game extends Scene {
             gameObject.emit('clicked');
         })
         this.speechText = this.add.text(16, 16, 'says: ' + this.currentItem, { fontSize: '32px', fill: '#000' });
-        this.timeText = this.add.text(16, 32, ""+this.timeLeft, { fontSize: '32px', fill: '#000' });
+        this.timeText = this.add.text(16, 32, "" + this.timeLeft, { fontSize: '32px', fill: '#000' });
     }
 
     update() {
         this.timeLeft--;
         this.timeText.setText(this.timeLeft);
-        if this.timeLeft = 0 
-        else this.scene.start('MainMenu');
-        }
+        if (this.timeLeft <= 0) { this.scene.start('GameOver'); }
+    }
 }
 
 //add onevent and talka abt text changing for delay
