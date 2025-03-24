@@ -1,5 +1,12 @@
 import { Scene } from 'phaser';
 
+const ITEM_HINTS: {[index: string]: string}= {
+    A: 'avocado',
+    B: 'flowers',
+    C: 'pirate',
+    D: 'donkey'
+}
+
 
 export class Game extends Scene {
     currentItem: string;
@@ -38,13 +45,20 @@ export class Game extends Scene {
                 this.speechText.setText("Your next item is...")
                 this.time.delayedCall(500, () => {
                     this.randomizeItem();
-                    this.speechText.setText('says: ' + this.currentItem);
+                    this.speechText.setText('says: ' + ITEM_HINTS[this.currentItem]);
                 });
             });
             // change item ,add score, etc.
         } else {
             console.log(this.currentItem + " no bad");
             this.speechText.setText("says: No bad!");
+            
+            this.time.delayedCall(1000, () => {
+                this.speechText.setText("Your still item is...")
+                this.time.delayedCall(500, () => {
+                    this.speechText.setText('says: ' + ITEM_HINTS[this.currentItem]);
+                });
+            });
             this.timeLeft -= 100;
         }
     }
