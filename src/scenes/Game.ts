@@ -4,7 +4,9 @@ const ITEM_HINTS: {[index: string]: string}= {
     A: 'avocado',
     B: 'flowers',
     C: 'pirate',
-    D: 'donkey'
+    D: 'donkey',
+    E: 'egg',
+    F: 'funnyword'
 }
 
 
@@ -14,6 +16,8 @@ export class Game extends Scene {
     itemB: any;
     itemC: any;
     itemD: any;
+    itemE: any;
+    itemF: any;
     bingus: any;
     bg: any;
     speechText: any;
@@ -32,6 +36,8 @@ export class Game extends Scene {
         this.load.image('itemB', 'assets/itemB.png');
         this.load.image('itemC', 'assets/itemC.png');
         this.load.image('itemD', 'assets/itemD.png');
+        this.load.image('itemE', 'assets/itemE.png');
+        this.load.image('itemF', 'assets/itemF.png');
 
 
     }
@@ -64,7 +70,7 @@ export class Game extends Scene {
     }
 
     randomizeItem() {
-        this.currentItem = Phaser.Math.RND.pick(['A', 'B', 'C', 'D']);
+        this.currentItem = Phaser.Math.RND.pick(['A', 'B', 'C', 'D','E','F']);
     }
 
     create() {
@@ -81,7 +87,11 @@ export class Game extends Scene {
         this.itemC.value = "C";
         this.itemD = this.add.image(450, 550, 'itemD').setScale(0.5);
         this.itemD.value = "D";
-        for (const item of [this.itemA, this.itemB, this.itemC, this.itemD]) {
+        this.itemE = this.add.image(600, 450, 'itemE').setScale(0.5);
+        this.itemE.value = "E";
+        this.itemF = this.add.image(600, 550, 'itemF').setScale(0.5);
+        this.itemF.value = "F";
+        for (const item of [this.itemA, this.itemB, this.itemC, this.itemD, this.itemE, this.itemF]) {
             item.setInteractive();
             item.on('clicked', () => {
                 this.checkItem(item);
@@ -90,8 +100,8 @@ export class Game extends Scene {
         this.input.on('gameobjectup', (pointer, gameObject) => {
             gameObject.emit('clicked');
         })
-        this.speechText = this.add.text(16, 16, 'says: ' + this.currentItem, { fontSize: '32px', fill: '#000' });
-        this.timeText = this.add.text(16, 32, "" + this.timeLeft, { fontSize: '32px', fill: '#000' });
+        this.speechText = this.add.text(16, 16, 'says: ' + this.currentItem, { fontSize: '32px', color: '#000'  });
+        this.timeText = this.add.text(740, 16, "" + this.timeLeft, { fontSize: '32px', color: '#c71414' });
     }
 
     update() {
