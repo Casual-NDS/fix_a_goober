@@ -1,12 +1,20 @@
 import { Scene } from 'phaser';
 
 const ITEM_HINTS: {[index: string]: string}= {
-    A: 'avocado',
+    A: 'avocado'+' '+'jeff',
     B: 'flowers',
     C: 'pirate',
     D: 'donkey',
     E: 'egg',
     F: 'funnyword'
+}
+const ITEM_BINGI: {[index: string]: string}= {
+    A: 'itemA',
+    B: 'itemB',
+    C: 'itemC',
+    D: 'itemD',
+    E: 'itemE',
+    F: 'itemF'
 }
 
 
@@ -18,11 +26,13 @@ export class Game extends Scene {
     itemD: any;
     itemE: any;
     itemF: any;
-    bingus: any;
+    bingus: Phaser.GameObjects.Image;
     bg: any;
     speechText: any;
     timeText: any;
     timeLeft = 1000;
+    streakCounter: number;
+    streakCounterText:any;
     constructor() {
         super('Game');
     }
@@ -46,11 +56,14 @@ export class Game extends Scene {
         if (this.currentItem == item.value) {
             console.log(this.currentItem + " right item!")
             this.speechText.setText("says: You got it!");
+            this.streakCounter += 1;
+            console.log(this.streakCounter);
             this.timeLeft += 1000;
-            this.time.delayedCall(2000, () => {
+            this.time.delayedCall(500, () => {
                 this.speechText.setText("Your next item is...")
+                this.randomizeItem();
+                this.bingus.setTexture(ITEM_BINGI[this.currentItem]);
                 this.time.delayedCall(500, () => {
-                    this.randomizeItem();
                     this.speechText.setText('says: ' + ITEM_HINTS[this.currentItem]);
                 });
             });
@@ -58,7 +71,8 @@ export class Game extends Scene {
         } else {
             console.log(this.currentItem + " no bad");
             this.speechText.setText("says: No bad!");
-            
+            this.streakCounter = 0;
+            console.log(this.streakCounter)
             this.time.delayedCall(1000, () => {
                 this.speechText.setText("Your still item is...")
                 this.time.delayedCall(500, () => {
@@ -75,6 +89,7 @@ export class Game extends Scene {
 
     create() {
         // randomize chosen item
+        this.streakCounter =0;
         this.timeLeft = 1000;
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
@@ -97,17 +112,30 @@ export class Game extends Scene {
                 this.checkItem(item);
             })
         }
-        this.input.on('gameobjectup', (pointer, gameObject) => {
+        this.input.on('gameobjectup', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.GameObject) => {
             gameObject.emit('clicked');
         })
         this.speechText = this.add.text(16, 16, 'says: ' + this.currentItem, { fontSize: '32px', color: '#000'  });
-        this.timeText = this.add.text(740, 16, "" + this.timeLeft, { fontSize: '32px', color: '#c71414' });
+        this.timeText = this.add.text(710, 16, "" + Math.floor(this.timeLeft / 100), { fontSize: '32px', color: '#c71414' });
+        this.streakCounterText = this.add.text(710, 50, "" + this.streakCounter, { fontSize: '32px', color: '#d9cd23'});
     }
 
     update() {
-        this.timeLeft--;
-        this.timeText.setText(this.timeLeft);
-        if (this.timeLeft <= 0) { this.scene.start('GameOver'); }
+        // if the streak counter is greater than 10 or something
+        // subtract more from timeleft
+        // else
+        // subtract 1
+        // if(this.streakCounter > 5) {
+        //     this.timeLeft -=
+        // }
+        this.timeLeft -= 1 + this.streakCounter / 10;
+        this.timeText.setText(Math.floor(this.timeLeft / 100));
+        this.streakCounterText.setText(this.streakCounter);
+        if (this.timeLeft <= 0) {
+            this.scene.start('GameOver');
+            this.streakCounter=0;
+            console.log(this.streakCounter)
+         }
     }
 }
 
