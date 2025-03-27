@@ -1,12 +1,12 @@
 import { Scene } from 'phaser';
 
 const ITEM_HINTS: {[index: string]: string}= {
-    A: 'ME. WANT. DRINK.',
-    B: 'Need...medical attenion...ow.',
+    A: '"ME. WANT. DRINK."',
+    B: ('"Need...\nmedical attenion...ow."'),
     C: 'Brains.....',
-    D: 'me need you to give passport to exit country',
-    E: 'give me your money hehehehehe',
-    F: 'I got turned into a steak! Why are you looking at me like that?!'
+    D: '"You passort?\nI go to Arstatzka."',
+    E: '"give me \nyour money \nhehehehehe"',
+    F: '"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'
 }
 const ITEM_BINGI: {[index: string]: string}= {
     A: 'goober0',
@@ -15,6 +15,7 @@ const ITEM_BINGI: {[index: string]: string}= {
     D: 'goober3',
     E: 'goober4',
     F: 'goober5',
+    G: 'goober7',
 }
 
 
@@ -32,6 +33,7 @@ export class Game extends Scene {
     goober3: Phaser.GameObjects.Image;
     goober4: Phaser.GameObjects.Image;
     goober5: Phaser.GameObjects.Image;
+    goober7: Phaser.GameObjects.Image;
     bingus: Phaser.GameObjects.Image;
     bg: any;
     speechText: any;
@@ -60,6 +62,7 @@ export class Game extends Scene {
         this.load.image('goober3','assets/goober3.PNG');
         this.load.image('goober4','assets/goober4.PNG');
         this.load.image('goober5','assets/goober5.PNG');
+        this.load.image('goober7','assets/goober7.png')
 
 
     }
@@ -67,16 +70,17 @@ export class Game extends Scene {
     checkItem(item: any) {
         if (this.currentItem == item.value) {
             console.log(this.currentItem + " right item!")
-            this.speechText.setText("says: You got it!");
+            this.speechText.setText("CORRECT!");
             this.streakCounter += 1;
             console.log(this.streakCounter);
             this.timeLeft += 1000;
-            this.time.delayedCall(500, () => {
-                this.speechText.setText("Your next item is...")
+            this.time.delayedCall(2000, () => {
+                this.bingus.setTexture(ITEM_BINGI['G']);
+                this.speechText.setText("You:NEXT!!!")
                 this.randomizeItem();
-                this.bingus.setTexture(ITEM_BINGI[this.currentItem]).setScale(.20);
+                this.bingus.setTexture(ITEM_BINGI[this.currentItem]);
                 this.time.delayedCall(500, () => {
-                    this.speechText.setText('says: ' + ITEM_HINTS[this.currentItem]);
+                    this.speechText.setText('' + ITEM_HINTS[this.currentItem]);
                 });
             });
             // change item ,add score, etc.
@@ -86,7 +90,7 @@ export class Game extends Scene {
             this.streakCounter = 0;
             console.log(this.streakCounter)
             this.time.delayedCall(1000, () => {
-                this.speechText.setText("Your still item is...")
+                this.speechText.setText("Try Again!")
                 this.time.delayedCall(500, () => {
                     this.speechText.setText('says: ' + ITEM_HINTS[this.currentItem]);
                 });
@@ -131,7 +135,7 @@ export class Game extends Scene {
         this.input.on('gameobjectup', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.GameObject) => {
             gameObject.emit('clicked');
         })
-        this.speechText = this.add.text(16, 16, 'says: ' + (ITEM_HINTS[this.currentItem]), { fontSize: '18px', color: '#000',});
+        this.speechText = this.add.text(16, 16, (ITEM_HINTS[this.currentItem]), { fontSize: '32px', color: '#000',});
         this.bingus.setTexture(ITEM_BINGI[this.currentItem]).setScale(.20);
         this.timeText = this.add.text(710, 16, "" + Math.floor(this.timeLeft / 100), { fontSize: '32px', color: '#c71414',});
         this.streakCounterText = this.add.text(710, 50, "" + this.streakCounter, { fontSize: '32px', color: '#d9cd23'});
