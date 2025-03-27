@@ -1,8 +1,8 @@
 import { Scene } from 'phaser';
 
-const ITEM_HINTS: {[index: string]: string}= {
-    A: '"ME. WANT. DRINK."',
-    B: ('"Need...\nmedical attenion...ow."'),
+const ITEM_HINTS: {[index: string]: string[]}= {
+    A: ['"ME. WANT. DRINK."'],
+    B: ['"Need...\nmedical attenion...ow."', '"ow."'],
     C: 'Brains.....',
     D: '"You passort?\nI go to Arstatzka."',
     E: '"give me \nyour money \nhehehehehe"',
@@ -80,7 +80,7 @@ export class Game extends Scene {
                 this.randomizeItem();
                 this.bingus.setTexture(ITEM_BINGI[this.currentItem]);
                 this.time.delayedCall(500, () => {
-                    this.speechText.setText('' + ITEM_HINTS[this.currentItem]);
+                    this.speechText.setText('' + ITEM_HINTS[this.currentItem][Math.random()*ITEM_HINTS[this.currentItem].length]);
                 });
             });
             // change item ,add score, etc.
