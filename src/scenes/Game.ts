@@ -9,12 +9,12 @@ const ITEM_HINTS: {[index: string]: string}= {
     F: 'funnyword'
 }
 const ITEM_BINGI: {[index: string]: string}= {
-    A: 'itemA',
-    B: 'itemB',
-    C: 'itemC',
-    D: 'itemD',
-    E: 'itemE',
-    F: 'itemF'
+    A: 'goober0'
+    B: 'goober1',
+    C: 'goober2',
+    D: 'goober3',
+    E: 'goober4',
+    F: 'goober5',
 }
 
 
@@ -26,6 +26,12 @@ export class Game extends Scene {
     itemD: any;
     itemE: any;
     itemF: any;
+    goober0: Phaser.GameObjects.Image;
+    goober1: Phaser.GameObjects.Image;
+    goober2: Phaser.GameObjects.Image;
+    goober3: Phaser.GameObjects.Image;
+    goober4: Phaser.GameObjects.Image;
+    goober5: Phaser.GameObjects.Image;
     bingus: Phaser.GameObjects.Image;
     bg: any;
     speechText: any;
@@ -48,6 +54,12 @@ export class Game extends Scene {
         this.load.image('itemD', 'assets/itemD.png');
         this.load.image('itemE', 'assets/itemE.png');
         this.load.image('itemF', 'assets/itemF.png');
+        this.load.image('goober0','assets/goober0.PNG');
+        this.load.image('goober1','assets/goober1.PNG');
+        this.load.image('goober2','assets/goober2.PNG');
+        this.load.image('goober3','assets/goober3.PNG');
+        this.load.image('goober4','assets/goober4.PNG');
+        this.load.image('goober5','assets/goober5.PNG');
 
 
     }
@@ -106,6 +118,14 @@ export class Game extends Scene {
         this.itemE.value = "E";
         this.itemF = this.add.image(600, 550, 'itemF').setScale(0.5);
         this.itemF.value = "F";
+        // this.goober0 = this.add.image(400,100, 'goober0').setScale(.5);
+        // this.goober1 = this.add.image(400,100, 'goober1').setScale(.5);
+        // this.goober2 = this.add.image(400,100, 'goober2').setScale(.5);
+        // this.goober3 = this.add.image(400,100, 'goober3').setScale(.5);
+        // this.goober4 = this.add.image(400,100, 'goober4').setScale(.5);
+        // this.goober5 = this.add.image(400,100, 'goober5').setScale(.5);
+        
+        
         for (const item of [this.itemA, this.itemB, this.itemC, this.itemD, this.itemE, this.itemF]) {
             item.setInteractive();
             item.on('clicked', () => {
