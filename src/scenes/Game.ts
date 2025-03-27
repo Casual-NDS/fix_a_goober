@@ -1,15 +1,15 @@
 import { Scene } from 'phaser';
 
 const ITEM_HINTS: {[index: string]: string}= {
-    A: 'avocado'+' '+'jeff',
-    B: 'flowers',
-    C: 'pirate',
-    D: 'donkey',
-    E: 'egg',
-    F: 'funnyword'
+    A: 'ME. WANT. DRINK.',
+    B: 'Need...medical attenion...ow.',
+    C: 'Brains.....',
+    D: 'me need you to give passport to exit country',
+    E: 'give me your money hehehehehe',
+    F: 'I got turned into a steak! Why are you looking at me like that?!'
 }
 const ITEM_BINGI: {[index: string]: string}= {
-    A: 'goober0'
+    A: 'goober0',
     B: 'goober1',
     C: 'goober2',
     D: 'goober3',
@@ -74,7 +74,7 @@ export class Game extends Scene {
             this.time.delayedCall(500, () => {
                 this.speechText.setText("Your next item is...")
                 this.randomizeItem();
-                this.bingus.setTexture(ITEM_BINGI[this.currentItem]);
+                this.bingus.setTexture(ITEM_BINGI[this.currentItem]).setScale(.20);
                 this.time.delayedCall(500, () => {
                     this.speechText.setText('says: ' + ITEM_HINTS[this.currentItem]);
                 });
@@ -103,9 +103,10 @@ export class Game extends Scene {
         // randomize chosen item
         this.streakCounter =0;
         this.timeLeft = 1000;
+        (ITEM_HINTS[this.currentItem]);
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
-        this.bingus = this.add.image(400, 100, 'bingus').setScale(2);
+        this.bingus = this.add.image(500, 150, 'bingus').setScale(2);
         this.itemA = this.add.image(350, 450, 'itemA').setScale(0.5);
         this.itemA.value = "A";
         this.itemB = this.add.image(450, 450, 'itemB').setScale(0.5);
@@ -118,12 +119,7 @@ export class Game extends Scene {
         this.itemE.value = "E";
         this.itemF = this.add.image(600, 550, 'itemF').setScale(0.5);
         this.itemF.value = "F";
-        // this.goober0 = this.add.image(400,100, 'goober0').setScale(.5);
-        // this.goober1 = this.add.image(400,100, 'goober1').setScale(.5);
-        // this.goober2 = this.add.image(400,100, 'goober2').setScale(.5);
-        // this.goober3 = this.add.image(400,100, 'goober3').setScale(.5);
-        // this.goober4 = this.add.image(400,100, 'goober4').setScale(.5);
-        // this.goober5 = this.add.image(400,100, 'goober5').setScale(.5);
+        
         
         
         for (const item of [this.itemA, this.itemB, this.itemC, this.itemD, this.itemE, this.itemF]) {
@@ -135,8 +131,9 @@ export class Game extends Scene {
         this.input.on('gameobjectup', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.GameObject) => {
             gameObject.emit('clicked');
         })
-        this.speechText = this.add.text(16, 16, 'says: ' + this.currentItem, { fontSize: '32px', color: '#000'  });
-        this.timeText = this.add.text(710, 16, "" + Math.floor(this.timeLeft / 100), { fontSize: '32px', color: '#c71414' });
+        this.speechText = this.add.text(16, 16, 'says: ' + (ITEM_HINTS[this.currentItem]), { fontSize: '18px', color: '#000',});
+        this.bingus.setTexture(ITEM_BINGI[this.currentItem]).setScale(.20);
+        this.timeText = this.add.text(710, 16, "" + Math.floor(this.timeLeft / 100), { fontSize: '32px', color: '#c71414',});
         this.streakCounterText = this.add.text(710, 50, "" + this.streakCounter, { fontSize: '32px', color: '#d9cd23'});
     }
 
