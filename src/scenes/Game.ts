@@ -18,6 +18,9 @@ const ITEM_BINGI: {[index: string]: string}= {
     G: 'goober7',
 }
 
+function getRandom(array: string[]): string{
+    return array[Math.floor(Math.random() * array.length)];
+}
 
 export class Game extends Scene {
     currentItem: string;
@@ -70,9 +73,11 @@ export class Game extends Scene {
 
 
     }
-
+    winning = false;
     checkItem(item: any) {
+        if (this.winning) return;
         if (this.currentItem == item.value) {
+            this.winning = true;
             console.log(this.currentItem + " right item!")
             this.speechText.setText("CORRECT!");
             this.streakCounter += 1;
@@ -84,9 +89,11 @@ export class Game extends Scene {
                 this.randomizeItem();
                 this.bingus.setTexture(ITEM_BINGI[this.currentItem]);
                 this.time.delayedCall(1000, () => {
-                    this.speechText.setText('' + ITEM_HINTS[this.currentItem]
-                        // [Math.random()*ITEM_HINTS[this.currentItem].length]
-                );
+                    this.winning = false;
+                    this.speechText.setText('' +
+                        getRandom(ITEM_HINTS[this.currentItem]));
+                        // [Math.random()*ITEM_HINTS[this.currentItem].length])
+                
                 });
             });
             // change item ,add score, etc.
@@ -110,10 +117,11 @@ export class Game extends Scene {
     }
 
     create() {
+        this.winning = false;
         // randomize chosen item
         this.streakCounter =0;
         // added 2 zeros change back
-        this.timeLeft = 1000;
+        this.timeLeft = 1500;
         (ITEM_HINTS[this.currentItem]);
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
@@ -158,8 +166,8 @@ export class Game extends Scene {
         // if(this.streakCounter > 5) {
         //     this.timeLeft -=
         // }
-        this.timeLeft -= 1 + this.streakCounter / 20;
-        this.timeText.setText(Math.floor(this.timeLeft / 100));
+        this.timeLeft -= 1 + this.streakCounter / 100;
+        this.timeText.setText(Math.floor(this.timeLeft / 10));
         this.streakCounterText.setText(this.streakCounter);
         if (this.timeLeft <= 0) {
             this.scene.start('GameOver');
