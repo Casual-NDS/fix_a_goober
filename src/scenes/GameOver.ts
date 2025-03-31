@@ -3,7 +3,9 @@ import { Scene } from 'phaser';
 export class GameOver extends Scene
 {
     camera: Phaser.Cameras.Scene2D.Camera;
-    background: Phaser.GameObjects.Image;
+    gg: Phaser.GameObjects.Image;
+    ta: Phaser.GameObjects.Image;
+    thx: Phaser.GameObjects.Image;
     gameover_text : Phaser.GameObjects.Text;
 
     constructor ()
@@ -13,18 +15,12 @@ export class GameOver extends Scene
 
     create ()
     {
-        this.camera = this.cameras.main
-        this.camera.setBackgroundColor(0xff0000);
+        this.gg = this.add.image(400, 300, 'gg');
+        this.ta = this.add.image(235, 200, 'ta');
+        this.thx = this.add.image(590, 190, 'thx').setScale(0.65);
 
-        this.background = this.add.image(400, 300, 'background');
-        this.background.setAlpha(0.5);
-
-        this.gameover_text = this.add.text(400, 300, 'Game Over', {
-            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        });
-        this.gameover_text.setOrigin(0.5);
+       
+    
 
         this.input.once('pointerdown', () => {
 
