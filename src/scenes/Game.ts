@@ -1,12 +1,12 @@
 import { Scene } from 'phaser';
-
+//talk to mr sf as text is all shwoing up in the array
 const ITEM_HINTS: {[index: string]: string[]}= {
     A: ['"ME. WANT. DRINK."'],
     B: ['"Need...\nmedical attenion...ow."', '"ow."'],
-    C: 'Brains.....',
-    D: '"You passort?\nI go to Arstatzka."',
-    E: '"give me \nyour money \nhehehehehe"',
-    F: '"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'
+    C: ['Brains.....',],
+    D: ['"You passort?\nI go to Arstatzka."'],
+    E: ['"give me \nyour money \nhehehehehe"',],
+    F: ['"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'],
 }
 const ITEM_BINGI: {[index: string]: string}= {
     A: 'goober0',
@@ -35,6 +35,8 @@ export class Game extends Scene {
     goober5: Phaser.GameObjects.Image;
     goober7: Phaser.GameObjects.Image;
     bingus: Phaser.GameObjects.Image;
+    speech: Phaser.GameObjects.Image;
+    textcover: Phaser.GameObjects.Image; 
     bg: any;
     speechText: any;
     timeText: any;
@@ -46,23 +48,25 @@ export class Game extends Scene {
     }
 
     preload() {
-        this.load.image('bg', 'assets/bg.png');
+        this.load.image('bg', 'assets/bg.PNG');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
         this.load.image('bingus', 'assets/bingus_temp.png');
         this.load.image('itemA', 'assets/itemA.svg.png');
-        this.load.image('itemB', 'assets/itemB.png');
-        this.load.image('itemC', 'assets/itemC.png');
-        this.load.image('itemD', 'assets/itemD.png');
-        this.load.image('itemE', 'assets/itemE.png');
-        this.load.image('itemF', 'assets/itemF.png');
+        this.load.image('itemB', 'assets/itemB.PNG');
+        this.load.image('itemC', 'assets/itemC.PNG');
+        this.load.image('itemD', 'assets/itemD.PNG');
+        this.load.image('itemE', 'assets/itemE.PNG');
+        this.load.image('itemF', 'assets/itemF.PNG');
         this.load.image('goober0','assets/goober0.PNG');
         this.load.image('goober1','assets/goober1.PNG');
         this.load.image('goober2','assets/goober2.PNG');
         this.load.image('goober3','assets/goober3.PNG');
         this.load.image('goober4','assets/goober4.PNG');
         this.load.image('goober5','assets/goober5.PNG');
-        this.load.image('goober7','assets/goober7.png')
+        this.load.image('goober7','assets/goober7.png');
+        this.load.image('speech', 'assets/speech.png');
+        this.load.image('textcover', 'assets/textcover.PNG')
 
 
     }
@@ -80,7 +84,9 @@ export class Game extends Scene {
                 this.randomizeItem();
                 this.bingus.setTexture(ITEM_BINGI[this.currentItem]);
                 this.time.delayedCall(500, () => {
-                    this.speechText.setText('' + ITEM_HINTS[this.currentItem][Math.random()*ITEM_HINTS[this.currentItem].length]);
+                    this.speechText.setText('' + ITEM_HINTS[this.currentItem]
+                        // [Math.random()*ITEM_HINTS[this.currentItem].length]
+                );
                 });
             });
             // change item ,add score, etc.
@@ -106,22 +112,25 @@ export class Game extends Scene {
     create() {
         // randomize chosen item
         this.streakCounter =0;
-        this.timeLeft = 1000;
+        // added 2 zeros change back
+        this.timeLeft = 100000;
         (ITEM_HINTS[this.currentItem]);
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
+        this.speech = this.add.image(250,40, 'speech').setScale(1);
+        this.textcover = this.add.image(400,300, 'textcover').setScale(1);
         this.bingus = this.add.image(500, 150, 'bingus').setScale(2);
-        this.itemA = this.add.image(350, 450, 'itemA').setScale(0.5);
+        this.itemA = this.add.image(250, 360, 'itemA').setScale(.75);
         this.itemA.value = "A";
-        this.itemB = this.add.image(450, 450, 'itemB').setScale(0.5);
+        this.itemB = this.add.image(250, 500, 'itemB').setScale(0.10);
         this.itemB.value = "B";
-        this.itemC = this.add.image(350, 550, 'itemC').setScale(0.5);
+        this.itemC = this.add.image(450, 360, 'itemC').setScale(0.10);
         this.itemC.value = "C";
-        this.itemD = this.add.image(450, 550, 'itemD').setScale(0.5);
+        this.itemD = this.add.image(450, 500, 'itemD').setScale(0.10);
         this.itemD.value = "D";
-        this.itemE = this.add.image(600, 450, 'itemE').setScale(0.5);
+        this.itemE = this.add.image(700, 360, 'itemE').setScale(0.10);
         this.itemE.value = "E";
-        this.itemF = this.add.image(600, 550, 'itemF').setScale(0.5);
+        this.itemF = this.add.image(700, 500, 'itemF').setScale(0.10);
         this.itemF.value = "F";
         
         
@@ -137,8 +146,8 @@ export class Game extends Scene {
         })
         this.speechText = this.add.text(16, 16, (ITEM_HINTS[this.currentItem]), { fontSize: '32px', color: '#000',});
         this.bingus.setTexture(ITEM_BINGI[this.currentItem]).setScale(.20);
-        this.timeText = this.add.text(710, 16, "" + Math.floor(this.timeLeft / 100), { fontSize: '32px', color: '#c71414',});
-        this.streakCounterText = this.add.text(710, 50, "" + this.streakCounter, { fontSize: '32px', color: '#d9cd23'});
+        this.timeText = this.add.text(690, 55, "" + Math.floor(this.timeLeft / 100), { fontSize: '48px', color: '#ffffff',});
+        this.streakCounterText = this.add.text(710, 150, "" + this.streakCounter, { fontSize: '48px', color: '#ffffff'});
     }
 
     update() {
