@@ -1,13 +1,54 @@
 import { Scene } from 'phaser';
 //talk to mr sf as text is all shwoing up in the array
-const ITEM_HINTS: {[index: string]: string[]}= {
-    A: ['"ME. WANT. DRINK."'],
-    B: ['"Need...\nmedical attenion...ow."', '"ow."'],
-    C: ['Have you seen my eye?',],
-    D: ['"You passort?\nI go to Arstatzka."'],
-    E: ['"give me \nyour money \nhehehehehe"',],
-    F: ['"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'],
-}
+const ITEM_HINTS: {[index: string]: {[index: string]: string[]}}= {
+    A: {
+        A: ['"ME. WANT. DRINK."'],
+        B: ['"drinkb"'],
+        C: ['"drinkc"'],
+        D: ['"drinkd"'],
+        E: ['"drinke"'],
+        F: ['"drinkf"'],
+    },
+    B: {
+        A:['"Need...\nmedical attenion...ow."', '"ow."'],
+        B: ['"bandb"'],
+        C: ['"bandc"'],
+        D: ['"bandd"'],
+        E: ['"bande"'],
+        F: ['"bandf"'],
+    },
+    C: {
+        A:['Have you seen my eye?',],
+        B: ['"eyeb"'],
+        C: ['"eyec"'],
+        D: ['"eyed"'],
+        E: ['"eyee"'],
+        F: ['"eyef"'],
+    },
+    D: {
+        A:['"You passort?\nI go to Arstatzka."'],
+        B: ['"passb"'],
+        C: ['"passc"'],
+        D: ['"passd"'],
+        E: ['"passe"'],
+        F: ['"passf"'],
+    },
+    E: {
+        A:['"give me \nyour money \nhehehehehe"',],
+        B: ['"timeb"'],
+        C: ['"timec"'],
+        D: ['"timed"'],
+        E: ['"timee"'],
+        F: ['"timef"'],
+    },
+    F: {
+        A:['"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'],
+        B: ['"b"'],
+        C: ['"c"'],
+        D: ['"d"'],
+        E: ['"e"'],
+        F: ['"f"'],
+}}
 const ITEM_BINGI: {[index: string]: string}= {
     A: 'goober0',
     B: 'goober1',
@@ -24,6 +65,7 @@ function getRandom(array: string[]): string{
 
 export class Game extends Scene {
     currentItem: string;
+    currentGoober: string;
     itemA: any;
     itemB: any;
     itemC: any;
@@ -87,11 +129,12 @@ export class Game extends Scene {
                 this.bingus.setTexture(ITEM_BINGI['G']);
                 this.speechText.setText("NEXT!!!")
                 this.randomizeItem();
-                this.bingus.setTexture(ITEM_BINGI[this.currentItem]);
+                this.currentGoober = Phaser.Math.RND.pick(['A', 'B', 'C', 'D','E','F']);
+                this.bingus.setTexture(ITEM_BINGI[this.currentGoober]);
                 this.time.delayedCall(1000, () => {
                     this.winning = false;
                     this.speechText.setText('' +
-                        getRandom(ITEM_HINTS[this.currentItem]));
+                        getRandom(ITEM_HINTS[this.currentItem][this.currentGoober]));
                         // [Math.random()*ITEM_HINTS[this.currentItem].length])
                 
                 });
@@ -105,7 +148,7 @@ export class Game extends Scene {
             this.time.delayedCall(1000, () => {
                 this.speechText.setText("Try Again!")
                 this.time.delayedCall(500, () => {
-                    this.speechText.setText('says: ' + ITEM_HINTS[this.currentItem]);
+                    this.speechText.setText( + ITEM_HINTS[this.currentItem]);
                 });
             });
             this.timeLeft -= 3000;
@@ -121,7 +164,7 @@ export class Game extends Scene {
         // randomize chosen item
         this.streakCounter =0;
         // added 2 zeros change back
-        this.timeLeft = 1500;
+        this.timeLeft = 200;
         (ITEM_HINTS[this.currentItem]);
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
@@ -152,8 +195,8 @@ export class Game extends Scene {
         this.input.on('gameobjectup', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.GameObject) => {
             gameObject.emit('clicked');
         })
-        this.speechText = this.add.text(16, 16, (ITEM_HINTS[this.currentItem]), { fontSize: '32px', color: '#000',});
-        this.bingus.setTexture(ITEM_BINGI[this.currentItem]).setScale(.20);
+        this.speechText = this.add.text(16, 16, (ITEM_HINTS[this.currentItem][this.currentGoober]), { fontSize: '32px', color: '#000',});
+        this.bingus.setTexture(ITEM_BINGI[this.currentGoober]).setScale(.20);
         this.timeText = this.add.text(690, 55, "" + Math.floor(this.timeLeft / 100), { fontSize: '48px', color: '#ffffff',});
         this.streakCounterText = this.add.text(710, 150, "" + this.streakCounter, { fontSize: '48px', color: '#ffffff'});
     }
@@ -166,7 +209,7 @@ export class Game extends Scene {
         // if(this.streakCounter > 5) {
         //     this.timeLeft -=
         // }
-        this.timeLeft -= 1 + this.streakCounter / 100;
+        this.timeLeft -= 1 + this.streakCounter / 10;
         this.timeText.setText(Math.floor(this.timeLeft / 10));
         this.streakCounterText.setText(this.streakCounter);
         if (this.timeLeft <= 0) {
