@@ -1,4 +1,5 @@
 import { Boot } from './scenes/Boot';
+import { CutScene } from './scenes/CutScene';
 import { Game as MainGame } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
@@ -17,7 +18,7 @@ const config: Types.Core.GameConfig = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { x: 0, y: 300},
+            gravity: { x: 0, y: 300 },
             debug: false
         }
     },
@@ -29,6 +30,7 @@ const config: Types.Core.GameConfig = {
         Boot,
         Preloader,
         MainMenu,
+        CutScene,
         MainGame,
         GameOver
     ]

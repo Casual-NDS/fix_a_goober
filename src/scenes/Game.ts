@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 //talk to mr sf as text is all shwoing up in the array
-const ITEM_HINTS: {[index: string]: {[index: string]: string[]}}= {
+const ITEM_HINTS: { [index: string]: { [index: string]: string[] } } = {
     A: {
         A: ['"ME. WANT. DRINK."'],
         B: ['"drinkb"'],
@@ -10,7 +10,7 @@ const ITEM_HINTS: {[index: string]: {[index: string]: string[]}}= {
         F: ['"drinkf"'],
     },
     B: {
-        A:['"Need...\nmedical attenion...ow."', '"ow."'],
+        A: ['"Need...\nmedical attenion...ow."', '"ow."'],
         B: ['"bandb"'],
         C: ['"bandc"'],
         D: ['"bandd"'],
@@ -18,7 +18,7 @@ const ITEM_HINTS: {[index: string]: {[index: string]: string[]}}= {
         F: ['"bandf"'],
     },
     C: {
-        A:['Have you seen my eye?',],
+        A: ['Have you seen my eye?',],
         B: ['"eyeb"'],
         C: ['"eyec"'],
         D: ['"eyed"'],
@@ -26,7 +26,7 @@ const ITEM_HINTS: {[index: string]: {[index: string]: string[]}}= {
         F: ['"eyef"'],
     },
     D: {
-        A:['"You passort?\nI go to Arstatzka."'],
+        A: ['"You passort?\nI go to Arstatzka."'],
         B: ['"passb"'],
         C: ['"passc"'],
         D: ['"passd"'],
@@ -34,7 +34,7 @@ const ITEM_HINTS: {[index: string]: {[index: string]: string[]}}= {
         F: ['"passf"'],
     },
     E: {
-        A:['"give me \nyour money \nhehehehehe"',],
+        A: ['"give me \nyour money \nhehehehehe"',],
         B: ['"timeb"'],
         C: ['"timec"'],
         D: ['"timed"'],
@@ -42,14 +42,15 @@ const ITEM_HINTS: {[index: string]: {[index: string]: string[]}}= {
         F: ['"timef"'],
     },
     F: {
-        A:['"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'],
-        B: ['"b"'],
-        C: ['"c"'],
-        D: ['"d"'],
-        E: ['"e"'],
-        F: ['"f"'],
-}}
-const ITEM_BINGI: {[index: string]: string}= {
+        A: ['"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'],
+        B: ['"steakb"'],
+        C: ['"steakc"'],
+        D: ['"steakd"'],
+        E: ['"steake"'],
+        F: ['"steakf"'],
+    }
+}
+const ITEM_BINGI: { [index: string]: string } = {
     A: 'goober0',
     B: 'goober1',
     C: 'goober2',
@@ -59,7 +60,7 @@ const ITEM_BINGI: {[index: string]: string}= {
     G: 'goober7',
 }
 
-function getRandom(array: string[]): string{
+function getRandom(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
 }
 
@@ -81,13 +82,13 @@ export class Game extends Scene {
     goober7: Phaser.GameObjects.Image;
     bingus: Phaser.GameObjects.Image;
     speech: Phaser.GameObjects.Image;
-    textcover: Phaser.GameObjects.Image; 
+    textcover: Phaser.GameObjects.Image;
     bg: any;
     speechText: any;
     timeText: any;
     timeLeft = 1000;
     streakCounter: number;
-    streakCounterText:any;
+    streakCounterText: any;
     constructor() {
         super('Game');
     }
@@ -103,13 +104,13 @@ export class Game extends Scene {
         this.load.image('itemD', 'assets/itemD.PNG');
         this.load.image('itemE', 'assets/itemE.PNG');
         this.load.image('itemF', 'assets/itemF.PNG');
-        this.load.image('goober0','assets/goober0.PNG');
-        this.load.image('goober1','assets/goober1.PNG');
-        this.load.image('goober2','assets/goober2.PNG');
-        this.load.image('goober3','assets/goober3.PNG');
-        this.load.image('goober4','assets/goober4.PNG');
-        this.load.image('goober5','assets/goober5.PNG');
-        this.load.image('goober7','assets/goober7.png');
+        this.load.image('goober0', 'assets/goober0.PNG');
+        this.load.image('goober1', 'assets/goober1.PNG');
+        this.load.image('goober2', 'assets/goober2.PNG');
+        this.load.image('goober3', 'assets/goober3.PNG');
+        this.load.image('goober4', 'assets/goober4.PNG');
+        this.load.image('goober5', 'assets/goober5.PNG');
+        this.load.image('goober7', 'assets/goober7.png');
         this.load.image('speech', 'assets/speech.png');
         this.load.image('textcover', 'assets/textcover.PNG')
 
@@ -126,17 +127,16 @@ export class Game extends Scene {
             console.log(this.streakCounter);
             this.timeLeft += 2000;
             this.time.delayedCall(1000, () => {
-                this.bingus.setTexture(ITEM_BINGI['G']);
+                // this.bingus.setTexture(ITEM_BINGI['G']);
                 this.speechText.setText("NEXT!!!")
                 this.randomizeItem();
-                this.currentGoober = Phaser.Math.RND.pick(['A', 'B', 'C', 'D','E','F']);
                 this.bingus.setTexture(ITEM_BINGI[this.currentGoober]);
                 this.time.delayedCall(1000, () => {
                     this.winning = false;
                     this.speechText.setText('' +
                         getRandom(ITEM_HINTS[this.currentItem][this.currentGoober]));
-                        // [Math.random()*ITEM_HINTS[this.currentItem].length])
-                
+                    // [Math.random()*ITEM_HINTS[this.currentItem].length])
+
                 });
             });
             // change item ,add score, etc.
@@ -145,10 +145,10 @@ export class Game extends Scene {
             this.speechText.setText("WRONG!");
             this.streakCounter = 0;
             console.log(this.streakCounter)
-            this.time.delayedCall(1000, () => {
+            this.time.delayedCall(10000, () => {
                 this.speechText.setText("Try Again!")
-                this.time.delayedCall(500, () => {
-                    this.speechText.setText( + ITEM_HINTS[this.currentItem]);
+                this.time.delayedCall(5000, () => {
+                    this.speechText.setText(+ ITEM_HINTS[this.currentItem]);
                 });
             });
             this.timeLeft -= 3000;
@@ -156,20 +156,23 @@ export class Game extends Scene {
     }
 
     randomizeItem() {
-        this.currentItem = Phaser.Math.RND.pick(['A', 'B', 'C', 'D','E','F']);
+        this.currentItem = Phaser.Math.RND.pick(['A', 'B', 'C', 'D', 'E', 'F']);
+        this.currentGoober = Phaser.Math.RND.pick(['A', 'B', 'C', 'D', 'E', 'F']);
+        console.log("Current Item: " + this.currentItem);
+        console.log("Current Goober: " + this.currentGoober);
     }
 
     create() {
         this.winning = false;
         // randomize chosen item
-        this.streakCounter =0;
+        this.streakCounter = 0;
         // added 2 zeros change back
         this.timeLeft = 200;
-        (ITEM_HINTS[this.currentItem]);
+        // (ITEM_HINTS[this.currentItem]);
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
-        this.speech = this.add.image(250,80, 'speech').setScale(1);
-        this.textcover = this.add.image(400,300, 'textcover').setScale(1);
+        this.speech = this.add.image(250, 80, 'speech').setScale(1);
+        this.textcover = this.add.image(400, 300, 'textcover').setScale(1);
         this.bingus = this.add.image(500, 150, 'bingus').setScale(2);
         this.itemA = this.add.image(700, 300, 'itemA').setScale(.65);
         this.itemA.value = "A";
@@ -183,9 +186,9 @@ export class Game extends Scene {
         this.itemE.value = "E";
         this.itemF = this.add.image(600, 350, 'itemF').setScale(0.06);
         this.itemF.value = "F";
-        
-        
-        
+
+
+
         for (const item of [this.itemA, this.itemB, this.itemC, this.itemD, this.itemE, this.itemF]) {
             item.setInteractive();
             item.on('clicked', () => {
@@ -195,10 +198,10 @@ export class Game extends Scene {
         this.input.on('gameobjectup', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.GameObject) => {
             gameObject.emit('clicked');
         })
-        this.speechText = this.add.text(16, 16, (ITEM_HINTS[this.currentItem][this.currentGoober]), { fontSize: '32px', color: '#000',});
+        this.speechText = this.add.text(16, 16, (ITEM_HINTS[this.currentItem][this.currentGoober]), { fontSize: '32px', color: '#000', });
         this.bingus.setTexture(ITEM_BINGI[this.currentGoober]).setScale(.20);
-        this.timeText = this.add.text(690, 55, "" + Math.floor(this.timeLeft / 100), { fontSize: '48px', color: '#ffffff',});
-        this.streakCounterText = this.add.text(710, 150, "" + this.streakCounter, { fontSize: '48px', color: '#ffffff'});
+        this.timeText = this.add.text(690, 55, "" + Math.floor(this.timeLeft / 100), { fontSize: '48px', color: '#ffffff', });
+        this.streakCounterText = this.add.text(710, 150, "" + this.streakCounter, { fontSize: '48px', color: '#ffffff' });
     }
 
     update() {
@@ -214,9 +217,9 @@ export class Game extends Scene {
         this.streakCounterText.setText(this.streakCounter);
         if (this.timeLeft <= 0) {
             this.scene.start('GameOver');
-            this.streakCounter=0;
+            this.streakCounter = 0;
             console.log(this.streakCounter)
-         }
+        }
     }
 }
 
