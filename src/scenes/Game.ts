@@ -22,8 +22,8 @@ const ITEM_HINTS: { [index: string]: { [index: string]: string[] } } = {
         B: ['"Pickled eyeball please."'],
         C: ['"So thats where my eye went."'],
         D: ['"This is not a delicacy in my homeland, comrade."'],
-        E: ['"eyee"'],
-        F: ['"eyef"'],
+        E: ['"Give me the weird green thing. Now!"'],
+        F: ['"I need help, but another eye won’t hurt…"'],
     },
     D: {
         A: ['"I. WANT. TRAVEL. ING."'],
@@ -42,12 +42,12 @@ const ITEM_HINTS: { [index: string]: { [index: string]: string[] } } = {
         F: ['"I feel…fine."'],
     },
     F: {
-        A: ['"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'],
-        B: ['"steakb"'],
-        C: ['"steakc"'],
-        D: ['"steakd"'],
-        E: ['"steake"'],
-        F: ['"I got turned \ninto a steak!\nWhy are you looking \nat me like that?!"'],
+        A: ['"SODIUM."'],
+        B: ['"Rub salt in my wounds, that’ll fix them."'],
+        C: ['"White stuff… for… brain…."'],
+        D: ['"Ah yes! Edible goods I recognize"'],
+        E: ['"Throwing salt won’t save you!"'],
+        F: ['"Please I need to be seasoned.."'],
     }
 }
 const ITEM_BINGI: { [index: string]: string } = {
@@ -145,10 +145,10 @@ export class Game extends Scene {
             this.speechText.setText("WRONG!");
             this.streakCounter = 0;
             console.log(this.streakCounter)
-            this.time.delayedCall(10000, () => {
+            this.time.delayedCall(1000, () => {
                 this.speechText.setText("Try Again!")
                 this.time.delayedCall(5000, () => {
-                    this.speechText.setText(+ ITEM_HINTS[this.currentItem]);
+                    this.speechText.setText('' + (ITEM_HINTS[this.currentItem]));
                 });
             });
             this.timeLeft -= 3000;

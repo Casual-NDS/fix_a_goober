@@ -14,9 +14,8 @@ export class MainMenu extends Scene {
     create() {
 
         this.background = this.add.image(400, 300, 'background');
-        this.tut = this.add.image(617, 180, 'tut').setScale(.21);
         this.credit = this.add.image(200, 25, 'credit').setScale(.75);
-        this.button = this.add.image(100, 100, "start_button")
+        this.button = this.add.image(650, 350, "start_button")
 
         this.button.setInteractive({ useHandCursor: true });
 
