@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 
 export class CutScene extends Scene {
   background: Phaser.GameObjects.Image;
-  credit: Phaser.GameObjects.Image;
+  not: Phaser.GameObjects.Image;
   button: Phaser.GameObjects.Image;
   continueTimer: Phaser.Time.TimerEvent;
 
@@ -14,7 +14,8 @@ export class CutScene extends Scene {
   }
 
   create() {
-    let video = this.add.video(400, 300, 'testvid');
+    this.not = this.add.image(400, 300, "not");
+    let video = this.add.video(400, 300, 'vid').setScale(1);
     video.play();
 
     let enableContinue = () => {
@@ -33,8 +34,8 @@ export class CutScene extends Scene {
 
 
     // this.background = this.add.image(400, 300, 'background');
-    this.credit = this.add.image(200, 25, 'credit').setScale(.75);
-    this.button = this.add.image(650, 350, "continue_button");
+    
+    this.button = this.add.image(550, 570, "continue_button").setScale(.65);
     this.button.setVisible(false);
     this.button.setInteractive({ useHandCursor: true });
     this.button.on('pointerover', () => {
@@ -44,11 +45,10 @@ export class CutScene extends Scene {
     this.button.on('pointerout', () => {
         this.button.setTexture("continue_button")
     });
-
-    this.button.once('pointerdown', () => {
-
+    this.input.once('pointerdown', () => {
+        this.button.setTexture("continue_button")
+        
         this.scene.start('Game');
-
-    });
-  }
+  });
 }
+  }

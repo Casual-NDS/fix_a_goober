@@ -3,51 +3,51 @@ import { Scene } from 'phaser';
 const ITEM_HINTS: { [index: string]: { [index: string]: string[] } } = {
     A: {
         A: ['"ME. WANT. DRINK."'],
-        B: ['"My throat is parched, do you have cough drops?"'],
+        B: ['"My throat is \nparched,\ndo you have\ncough drops?"'],
         C: ['"Grrr…..thirst."'],
-        D: ['"I want energy for ‘hard work’ and ‘money making’"'],
+        D: ['"I want energy for\n‘hard work’ and\n‘money making’"'],
         E: ['"Gimme your drink \nsucka!"'],
-        F: ['"Man I was cooked rare, I need liquid."'],
+        F: ['"Man I was\ncooked rare,\nI need liquid."'],
     },
     B: {
         A: ['"I. HURT."'],
         B: ['"Isn’t it obvious?"'],
-        C: ['"My brrrain is sticking out…"'],
-        D: ['"Medical supplies I need"'],
-        E: ['"Aye I needs up a fixing for the barrel of my firearm!"'],
-        F: ['"Someone bit off my ear!!!!!!!!!"'],
+        C: ['"My brrrain is\nsticking out…"'],
+        D: ['"Medical supplies\nI need."'],
+        E: ['"Aye I needs up a\nfixing for the\nbarrel of\nmy firearm!"'],
+        F: ['"Someone bit off\nmy ear!!!!!!!!!"'],
     },
     C: {
         A: ['"GREEN."',],
-        B: ['"Pickled eyeball please."'],
-        C: ['"So thats where my eye went."'],
-        D: ['"This is not a delicacy in my homeland, comrade."'],
-        E: ['"Give me the weird green thing. Now!"'],
-        F: ['"I need help, but another eye won’t hurt…"'],
+        B: ['"Pickled\neyeball please."'],
+        C: ['"So thats where\nmy eye went."'],
+        D: ['"What in jar \nis not a\ndelicacy in my\nhomeland, comrade."'],
+        E: ['"Give me the weird\ngreen thing. Now!"'],
+        F: ['"I may be a steak,\nbut another \neye won’t hurt…"'],
     },
     D: {
-        A: ['"I. WANT. TRAVEL. ING."'],
-        B: ['"The Hospital wants some I.D to prove who I am…"'],
+        A: ['"I. WANT.\nTRAVEL. ING."'],
+        B: ['"The Hospital \nwants some I.D \nto prove who I am…"'],
         C: ['"I…need..a..vacation "'],
-        D: ['"You got Passport? I travel to Arstotzka."'],
-        E: ['"THE FED ARE AFTER ME! HELP!"'],
-        F: ['"Trying to leave this place. Can you help?"'],
+        D: ['"You got Passport?\nI travel\nto Arstotzka."'],
+        E: ['"THE FED ARE AFTER \nME! HELP!"'],
+        F: ['"Trying to leave \nthis place.\nCan you help?"'],
     },
     E: {
         A: ['"Where am I?"',],
-        B: ['"Can you tell me where the hospital is?"'],
+        B: ['"I dont need \nanything...\nCan you tell me\nwhere the\nhospital is?"'],
         C: ['"Me….havee.. nothing"'],
-        D: ['"Hello there! I saw big line and thought “I should be here!”"'],
+        D: ['"Hello there! I\nsaw big line and\nthought\n“I should be here!”"'],
         E: ['"Stick em’ up!"'],
         F: ['"I feel…fine."'],
     },
     F: {
         A: ['"SODIUM."'],
-        B: ['"Rub salt in my wounds, that’ll fix them."'],
-        C: ['"White stuff… for… brain…."'],
-        D: ['"Ah yes! Edible goods I recognize"'],
-        E: ['"Throwing salt won’t save you!"'],
-        F: ['"Please I need to be seasoned.."'],
+        B: ['"Rub salt in my \nwounds,\nthat’ll fix them."'],
+        C: ['"White stuff…\nfor… brain…."'],
+        D: ['"Ah yes!\nEdible goods\nI recognize"'],
+        E: ['"Throwing salt \nwon’t save you!"'],
+        F: ['"Please I need to\nbe seasoned.."'],
     }
 }
 const ITEM_BINGI: { [index: string]: string } = {
@@ -126,12 +126,12 @@ export class Game extends Scene {
             this.streakCounter += 1;
             console.log(this.streakCounter);
             this.timeLeft += 2000;
-            this.time.delayedCall(1000, () => {
+            this.time.delayedCall(700, () => {
                 // this.bingus.setTexture(ITEM_BINGI['G']);
                 this.speechText.setText("NEXT!!!")
                 this.randomizeItem();
                 this.bingus.setTexture(ITEM_BINGI[this.currentGoober]);
-                this.time.delayedCall(1000, () => {
+                this.time.delayedCall(500, () => {
                     this.winning = false;
                     this.speechText.setText('' +
                         getRandom(ITEM_HINTS[this.currentItem][this.currentGoober]));
@@ -148,7 +148,7 @@ export class Game extends Scene {
             this.time.delayedCall(1000, () => {
                 this.speechText.setText("Try Again!")
                 this.time.delayedCall(5000, () => {
-                    this.speechText.setText('' + (ITEM_HINTS[this.currentItem]));
+                    this.speechText.setText('' + ([this.currentItem]));
                 });
             });
             this.timeLeft -= 3000;
@@ -166,13 +166,13 @@ export class Game extends Scene {
         this.winning = false;
         // randomize chosen item
         this.streakCounter = 0;
-        // added 2 zeros change back
-        this.timeLeft = 200;
+        // change timing
+        this.timeLeft = 5000;
         // (ITEM_HINTS[this.currentItem]);
         this.randomizeItem();
         this.bg = this.add.image(400, 300, 'bg').setScale(1);
-        this.speech = this.add.image(250, 80, 'speech').setScale(1);
-        this.textcover = this.add.image(400, 300, 'textcover').setScale(1);
+        this.speech = this.add.image(240, 100, 'speech').setScale(1.05);
+        this.textcover = this.add.image(752, 120, 'textcover').setScale(1.2);
         this.bingus = this.add.image(500, 150, 'bingus').setScale(2);
         this.itemA = this.add.image(700, 300, 'itemA').setScale(.65);
         this.itemA.value = "A";

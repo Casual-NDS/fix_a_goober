@@ -33,7 +33,8 @@ export class Preloader extends Scene {
         this.load.image('start_button_hovered', 'startb.png');
         this.load.image('continue_button', 'cona.png');
         this.load.image('continue_button_hovered', 'conb.png');
-        this.load.video('testvid', 'testvid.mp4');
+        this.load.image('not', 'not.jpg');
+        this.load.video('vid', 'cutscene.mp4');
     }
 
     create() {
