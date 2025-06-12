@@ -15,6 +15,7 @@ export class CutScene extends Scene {
 
   create() {
     this.not = this.add.image(400, 300, "not");
+    //video works?
     let video = this.add.video(400, 300, 'vid').setScale(1);
     video.play();
 
@@ -35,7 +36,7 @@ export class CutScene extends Scene {
 
     // this.background = this.add.image(400, 300, 'background');
     
-    this.button = this.add.image(550, 570, "continue_button").setScale(.65);
+    this.button = this.add.image(400, 550, "continue_button").setScale(.5);
     this.button.setVisible(false);
     this.button.setInteractive({ useHandCursor: true });
     this.button.on('pointerover', () => {
